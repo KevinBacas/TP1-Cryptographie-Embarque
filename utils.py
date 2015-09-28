@@ -18,5 +18,5 @@ def display_truth_table(f, n):
 def is_balanced(f, n):
 	res = 0
 	for i in range(1 << n):
-		res = res + ((f >> i) & 1)
-	return res == ((1 << n) / 2)
+		res = res + (1 if ((f >> i) & 1) else -1)
+	return res == 0
