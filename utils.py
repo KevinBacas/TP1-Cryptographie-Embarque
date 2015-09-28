@@ -34,3 +34,19 @@ def generate_keystream_with_LFSR(state, poly, n, l):
 		tmp_state, lower_bit = update_LFSR(tmp_state, poly, n)
 		res = (lower_bit << i) ^ (res)
 	return res
+
+def Generator(cle, l):
+	cle1 = cle & 0b1111111111 # 10 bits
+	cle2 = (cle >> 10) & 0b11111111111 # 11 bits
+	cle3 = (cle >> 21) # 12 bits
+	poly1 = (1 << 10) ^ (1 << 3) ^ 1
+	poly2 = (1 << 11) ^ (1 << 2) ^ 1
+	poly3 = (1 << 12) ^ (1 << 6) ^ (1 << 4) ^ (1 << 1) ^ 1
+	x1 = generate_keystream_with_LFSR(cle1, poly1, 10, l)
+	x2 = generate_keystream_with_LFSR(cle2, poly2, 11, l)
+	x3 = generate_keystream_with_LFSR(cle3, poly3, 12, l)
+	res = 0
+	for i in xrange(l):
+		res = (res << 1) ^ Boolean_function((x1 >> i)&1, (x2 >> i)&1, (x3 >> i)&1)
+	return res
+		
