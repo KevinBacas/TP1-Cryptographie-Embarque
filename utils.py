@@ -25,4 +25,12 @@ def update_LFSR(state, poly, n):
 	sn = 0
 	for i in xrange(n-1):
 		sn = sn ^ ((poly >> (i+1))&1) & ((state >> (n-1-i))&1)
-	return ((state >> 1) ^ (sn << (n-1))), sn
+	return ((state >> 1) ^ (sn << (n-1))), (state & 1)
+
+def generate_keystream_with_LFSR(state, poly, n, l):
+	res = 0
+	tmp_state = state
+	for i in xrange(l):
+		tmp_state, lower_bit = update_LFSR(tmp_state, poly, n)
+		res = (lower_bit << i) ^ (res)
+	return res
