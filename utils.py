@@ -20,3 +20,9 @@ def is_balanced(f, n):
 	for i in range(1 << n):
 		res = res + (1 if ((f >> i) & 1) else -1)
 	return res == 0
+
+def update_LFSR(state, poly, n):
+	sn = 0
+	for i in xrange(n-1):
+		sn = sn ^ ((poly >> (i+1))&1) & ((state >> (n-1-i))&1)
+	return ((state >> 1) ^ (sn << (n-1))), sn
